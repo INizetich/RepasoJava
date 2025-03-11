@@ -104,7 +104,10 @@ public abstract class Item implements Comparable<Item> {
         return Objects.equals(identificacionUnica, item.identificacionUnica);
     }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(identificacionUnica);
+    }
 
     @Override
     public int compareTo(Item o) {
