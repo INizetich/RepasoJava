@@ -87,6 +87,9 @@ public class Biblioteca<T extends Item> {
         }else {
             throw new GeneroInexistenteException("el genero no se encuentra en la biblioteca");
         }
+
+        System.out.println("Biblioteca filtrada con exito");
+        mostrarBiblioteca();
     }
 
 
