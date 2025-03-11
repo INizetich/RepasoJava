@@ -1,9 +1,11 @@
 package Modelo.Clases;
 
+import Modelo.interfaces.Media;
+
 import java.util.Objects;
 import java.util.UUID;
 
-public abstract class Item implements Comparable<Item> {
+public abstract class Item implements Comparable<Item>, Media {
 
     private  String  identificacionUnica;
     private String nombre;

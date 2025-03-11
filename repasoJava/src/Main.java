@@ -38,16 +38,17 @@ public class Main {
 
 
 
-try{
-    System.out.println("ingrese un genero a filtrar");
-    String genero = scanner.nextLine();
-    biblioteca.filtrarBiblioteca(genero);
-}catch (GeneroInexistenteException e){
-    e.printStackTrace();
 
+
+try{
+    biblioteca.modificarItem(juego2);
+}catch (VersionJuegoException e){
+    e.printStackTrace();
+}catch (FechaLanzamientoException e){
+    e.printStackTrace();
 }
 
 
-
+biblioteca.mostrarBiblioteca();
     }
 }
