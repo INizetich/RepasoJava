@@ -1,11 +1,9 @@
-import Exc.FechaLanzamientoException;
-import Exc.GeneroInexistenteException;
-import Exc.IdentificadorDuplicadoException;
-import Exc.VersionJuegoException;
+import Exc.*;
 import Modelo.Clases.Expansion;
 import Modelo.Clases.Juego;
 import Repositorio.Imp.Biblioteca;
 import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
@@ -32,7 +30,6 @@ public class Main {
            e.printStackTrace();
            System.out.println(e.getMessage());
        }finally {
-           System.out.println("biblioteca cargada con exito");
            biblioteca.mostrarBiblioteca();
        }
 
@@ -40,15 +37,27 @@ public class Main {
 
 
 
+
+
 try{
-    biblioteca.modificarItem(juego2);
-}catch (VersionJuegoException e){
+    System.out.println("ingrese el id del juego o expansion a buscar");
+    String identificador = scanner.nextLine();
+    biblioteca.buscarPorID(identificador);
+}catch (IdentificadorInexistenteException e){
     e.printStackTrace();
-}catch (FechaLanzamientoException e){
+}catch (InterruptedException e){
     e.printStackTrace();
 }
 
+try{
+    System.out.println("ingrese el id del juego o expansion a borrar");
+    String identificador = scanner.nextLine();
+    biblioteca.eliminarItem(identificador);
+}catch (IdentificadorInexistenteException e){
+    e.printStackTrace();
+}finally {
+    biblioteca.mostrarBiblioteca();
+}
 
-biblioteca.mostrarBiblioteca();
     }
 }

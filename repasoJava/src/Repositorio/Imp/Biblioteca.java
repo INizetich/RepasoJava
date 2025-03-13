@@ -1,20 +1,13 @@
 package Repositorio.Imp;
 
-import Exc.FechaLanzamientoException;
-import Exc.GeneroInexistenteException;
-import Exc.IdentificadorDuplicadoException;
-import Exc.VersionJuegoException;
+import Exc.*;
 import Modelo.Clases.Expansion;
 import Modelo.Clases.Item;
 import Modelo.Clases.Juego;
-
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
-
-public class Biblioteca<T extends Item> {
+import java.lang.Thread;
+public class Biblioteca<T extends Item>  {
     private Map<String,T> biblioteca;
         private static Scanner scanner = new Scanner(System.in);
     public Biblioteca(){
@@ -53,12 +46,35 @@ public class Biblioteca<T extends Item> {
 
 
     public void mostrarBiblioteca(){
+            /// GUARDO EN UNA LISTA LOS JUEGOS Y EXPANSIONES
+        List<Object> valores = new ArrayList<>(biblioteca.values());
 
-    for (T elemento : biblioteca.values()) {
-        System.out.println(elemento.toString());
+        /// CREO UN COMPARATOR PARA COMPRARA LOS TITULOS
+        Comparator<Object> comparadorPorTitulo = (o1,o2) -> {
+            String titulo1 = "";
+            String titulo2 = "";
 
-    }
+            if(o1 instanceof Juego){
+                titulo1 = ((Juego)o1).getNombre();
+            }else if (o1 instanceof Expansion){
+                titulo1 = ((Expansion)o1).getNombre();
+            }
 
+            if(o2 instanceof Juego){
+                titulo2 = ((Juego)o2).getNombre();
+            }else if (o2 instanceof Expansion){
+                titulo2 = ((Expansion)o2).getNombre();
+            }
+            return titulo1.compareTo(titulo2);
+        };
+        /// AL SER VALORES UNA LIST PUEDO USAR EL SORT DONDE VOY A GUARDAR LO QUE ORDENE EL ALGORITMO QUE VA A HACER EL COMPARATOR
+        valores.sort(comparadorPorTitulo);
+
+        /// ACA MUESTRO LA LISTA DE VALORES
+        System.out.println("valores ordenados por titulo:");
+        for (Object valor : valores) {
+            System.out.println(valor);
+        }
 
     }
 
@@ -120,10 +136,61 @@ public class Biblioteca<T extends Item> {
             if (((Expansion)elemento).getPublicacion() == null || ((Expansion)elemento).getPublicacion().isEmpty()) {
                 throw new FechaLanzamientoException("La fecha de lanzamiento no puede estar vacia");
 
-}
-
+            }
 
         }
+    }
+
+
+    public void buscarPorID(String id) throws IdentificadorInexistenteException, InterruptedException {
+
+        if(biblioteca.values().stream().anyMatch(elemento -> elemento.getIdentificacionUnica().equals(id))){
+            if(biblioteca.get(id) instanceof Juego){
+                System.out.println("Juego encontrado, cargando datos...");
+                Thread.sleep(700);
+                System.out.println(biblioteca.get(id).toString());
+            }else if (biblioteca.get(id) instanceof Expansion){
+                System.out.println("Expansion encontrada, cargando datos...");
+                Thread.sleep(700);
+                System.out.println(biblioteca.get(id).toString());
+            }
+
+        }else {
+            throw new IdentificadorInexistenteException("el id no existe");
+        }
+
+    }
+
+
+    public void eliminarItem(String id) throws IdentificadorInexistenteException{
+        char eleccion = 's';
+
+        if(biblioteca.values().stream().anyMatch(elemento -> elemento.getIdentificacionUnica().equals(id))){
+            System.out.println("ID ENCONTRADO EN LA BIBLIOTECA...");
+            System.out.println(biblioteca.get(id).toString());
+
+            while(eleccion == 's'){
+                System.out.println("desea eliminar de forma permanente el item? s/n");
+                  eleccion = scanner.next().charAt(0);
+
+                  if(eleccion == 's'){
+                      biblioteca.remove(id);
+                      System.out.println("Item removido correctamente!");
+                      break;
+                  }else {
+                      break;
+                  }
+            }
+
+
+
+        }else {
+            throw new IdentificadorInexistenteException("el id no existe");
+        }
+
+
+
+
     }
     @Override
     public String toString() {
